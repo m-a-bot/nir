@@ -74,15 +74,15 @@ class DBManager:
 
         with Transaction(self._connection, self._cursor) as trans:
             # print(f"INSERT INTO {wrap(table)} ({_columns}) VALUES ( {_template} );")
-            trans.execute(f"INSERT INTO {wrap(table)} ({_columns}) VALUES ( {_template} );", values)
+            trans.execute(f"INSERT INTO {wrap(table, '`')} ({_columns}) VALUES ( {_template} );", values)
 
     def select(self, table, columns=None):
         data = None
         with Transaction(self._connection, self._cursor) as trans:
             if columns is None:
-                trans.execute(f"SELECT * FROM {wrap(table)};")
+                trans.execute(f"SELECT * FROM {wrap(table, '`')};")
             else:
-                trans.execute(f"SELECT {collection_to_str(columns, ', ')} FROM {wrap(table)}")
+                trans.execute(f"SELECT {collection_to_str(columns, ', ')} FROM {wrap(table, '`')}")
             data = trans.get_all()
 
         return data
@@ -94,12 +94,12 @@ class DBManager:
     def delete(self, table):
 
         with Transaction(self._connection, self._cursor) as trans:
-            trans.execute(f"DELETE FROM {wrap(table)};")
+            trans.execute(f"DELETE FROM {wrap(table, '`')};")
 
     def __switch_db(self, connection, config):
 
         with Transaction(connection, None) as trans:
-            trans.execute_query(f"CREATE DATABASE {wrap(config['database'])};")
+            trans.execute_query(f"CREATE DATABASE {wrap(config['database'], '`')};")
 
         connection.database = config["database"]
 

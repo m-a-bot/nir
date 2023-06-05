@@ -49,11 +49,11 @@ class Timer:
         self.elapsed = self.stop - self.start
 
 
-def wrap(string):
-    return f'`{string}`'
+def wrap(string, symb="'"):
+    return f"{symb}{string}{symb}"
 
 
 def collection_to_str(collection, symbols=" ", item_wrap=True):
     if item_wrap:
-        return symbols.join([wrap(item) for item in collection])
+        return symbols.join([wrap(item, '`') for item in collection])
     return symbols.join(collection)

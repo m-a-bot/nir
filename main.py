@@ -181,8 +181,8 @@ def schemes_4nf():
     number varchar(20) not null,
     email varchar(255),
     ID_position int,
-    FOREIGN KEY (ID_position) REFERENCES Positions (ID),
     ID_department int,
+    FOREIGN KEY (ID_position) REFERENCES Positions (ID),
     FOREIGN KEY (ID_department) REFERENCES Departments (ID)
     );
     """
@@ -196,7 +196,7 @@ def schemes_4nf():
     departments = """
     create table Departments(
     ID int not null AUTO_INCREMENT PRIMARY KEY,
-    title varchar(255) not null,
+    title varchar(255) not null
     );
     """
     projects = """
@@ -204,7 +204,7 @@ def schemes_4nf():
     ID int not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(255) not null,
     date_of_start datetime not null,
-    date_of_end datetime not null,
+    date_of_end datetime not null
     );
     """
     project_participants = """
@@ -310,14 +310,13 @@ if __name__ == "__main__":
     #     plotter.plot(update_db_time)
     #     plotter.show()
 
+    insert_time = []
+    select_time = []
+    db_sizes = []
+    average_table_size = []
+
+    config['database'] = '1nf'
     with DBManager(config) as organizer:
-
-        insert_time = []
-        select_time = []
-        db_sizes = []
-        average_table_size = []
-
-        organizer.switch_database('1nf')
 
         for schema in schemes_1nf():
             organizer.create_table(schema)
@@ -344,8 +343,8 @@ if __name__ == "__main__":
         db_sizes.append(organizer.get_size_database())
         average_table_size.append(organizer.get_average_table_size())
 
-        # 2 нормальная форма
-        organizer.switch_database('2nf')
+    config['database'] = '2nf'
+    with DBManager(config) as organizer:
 
         for schema in schemes_2nf():
             organizer.create_table(schema)
@@ -373,7 +372,8 @@ if __name__ == "__main__":
         db_sizes.append(organizer.get_size_database())
         average_table_size.append(organizer.get_average_table_size())
 
-        organizer.switch_database('3nf')
+    config['database'] = '3nf'
+    with DBManager(config) as organizer:
 
         for schema in schemes_3nf():
             organizer.create_table(schema)
@@ -399,7 +399,8 @@ if __name__ == "__main__":
         db_sizes.append(organizer.get_size_database())
         average_table_size.append(organizer.get_average_table_size())
 
-        organizer.switch_database('4nf')
+    config['database'] = '4nf'
+    with DBManager(config) as organizer:
 
         for schema in schemes_4nf():
             organizer.create_table(schema)
@@ -425,7 +426,8 @@ if __name__ == "__main__":
         db_sizes.append(organizer.get_size_database())
         average_table_size.append(organizer.get_average_table_size())
 
-        organizer.switch_database('5nf')
+    config['database'] = '5nf'
+    with DBManager(config) as organizer:
 
         for schema in schemes_5nf():
             organizer.create_table(schema)
