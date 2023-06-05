@@ -3,20 +3,20 @@ import subprocess
 import mysql.connector
 from tools import *
 
+
 class Transaction:
 
     def __init__(self, connect, cursor):
         self._connect = connect
         self._cursor = cursor
 
+    def execute(self, command, values=None):
 
-    def execute(self, command, values = None):
-        
         if values:
             self._cursor.executemany(command, values)
         else:
             self._cursor.execute(command)
-    
+
     def execute_query(self, statement):
 
         self._connect.cmd_query(statement)
@@ -24,38 +24,35 @@ class Transaction:
     def get_one(self):
 
         return self._cursor.fetchone()
-    
 
     def get_many(self, size=1):
 
         return self._cursor.fetchmany(size)
-    
 
     def get_all(self):
 
         return self._cursor.fetchall()
 
-
     def __enter__(self):
-        
+
         return self
 
-
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        
+
         if exc_type:
-            
+
             self._connect.rollback()
             if exc_type is mysql.connector.DatabaseError:
                 return True
             logging.warning(exc_value)
-            #logging.warning("transaction rollback")
+            # logging.warning("transaction rollback")
             return True
 
         else:
             self._connect.commit()
 
             logging.info("transaction is committed")
+
 
 class DBManager:
 
@@ -64,9 +61,9 @@ class DBManager:
         self._connection = None
         self._cursor = None
         self._connect(config)
-    
+
     def create_table(self, query):
-        
+
         with Transaction(self._connection, self._cursor) as trans:
             trans.execute(query)
 
@@ -86,7 +83,7 @@ class DBManager:
             else:
                 trans.execute(f"SELECT {collection_to_str(columns, ', ')} FROM {wrap(table)}")
             data = trans.get_all()
-        
+
         return data
 
     def update(self, table, columns, values):
@@ -94,12 +91,12 @@ class DBManager:
         self.insert(table, columns, values)
 
     def delete(self, table):
-        
+
         with Transaction(self._connection, self._cursor) as trans:
             trans.execute(f"DELETE FROM {wrap(table)};")
 
     def __switch_db(self, connection, config):
-        
+
         with Transaction(connection, None) as trans:
             trans.execute_query(f"CREATE DATABASE {config['database']};")
 
@@ -114,7 +111,6 @@ class DBManager:
 
         cmd = f"mysqldump -h {self._config['host']} -u {self._config['user']} -p {self._config['database']} < {dump_name}"
         subprocess.run(cmd, shell=True)
-
 
     def get_size_table(self, table):
 
@@ -149,7 +145,6 @@ class DBManager:
             GROUP BY table_schema;
             """)
 
-
     def _connect(self, config):
 
         self._connection = mysql.connector.connect(
@@ -161,7 +156,6 @@ class DBManager:
         self.__switch_db(self._connection, config)
 
         self._cursor = self._connection.cursor()
-
 
     def switch_database(self, name_db):
 
@@ -179,17 +173,14 @@ class DBManager:
 
         self._cursor = self._connection.cursor()
 
-
     def _disconnect(self):
 
         self._cursor.close()
         self._connection.close()
 
-
     def __enter__(self):
         return self
-    
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        
+
         self._disconnect()

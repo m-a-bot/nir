@@ -4,16 +4,15 @@ from tools import *
 from desc_db import *
 
 config = {
-    "host" : "localhost",
-    "user" : "root",
-    "password" : "z9Cx",
-    "database" : "sandbox"
+    "host": "localhost",
+    "user": "root",
+    "password": "z9Cx",
+    "database": "sandbox"
 }
 
 
 def copy_database():
     with DBManager(config) as manager:
-
         manager.create_table(schema_table_persons())
         manager.create_table(schema_table_employees())
         manager.create_table(schema_table_positions())
@@ -32,22 +31,35 @@ if __name__ == "__main__":
     generator = Generator()
 
     with DBManager(config) as manager:
-        # manager.insert('Persons', ['first_name', 'last_name', "gender", 'address_location', 'email', 'number'], generator.generate_persons())
+        # manager.insert('Persons',
+        # ['first_name', 'last_name', "gender", 'address_location', 'email', 'number'], generator.generate_persons())
 
         # with Timer() as timer:
-        #     manager.insert('Companies', ['name_company', 'description', 'representative', 'location_company'], generator.generate_companies(n = 2))
+        #     manager.insert('Companies',
+        #     ['name_company', 'description', 'representative', 'location_company'],
+        #     generator.generate_companies(n = 2))
         # print(timer.elapsed)
 
         # print(manager.select('Persons'))
 
+        generation_time = []
         data = []
+        update_db_time = []
 
         for i in range(1, 50):
             with Timer() as timer:
-                manager.update('Companies', ['name_company', 'description', 'representative', 'location_company'], generator.generate_companies(n = i))
-            data.append(timer.elapsed)
+                data.append(generator.generate_companies(n=i))
+            generation_time.append(timer.elapsed)
+
+        for i in range(49):
+            with Timer() as timer:
+                manager.update('Companies',
+                               ['name_company', 'description', 'representative', 'location_company'], data[i])
+            update_db_time.append(timer.elapsed)
 
         plotter = Plotter()
-        plotter.plot(data)
-        #plotter.save()
+        plotter.plot(generation_time)
+        plotter.show()
+
+        plotter.plot(update_db_time)
         plotter.show()

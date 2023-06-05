@@ -1,5 +1,4 @@
 def schema_table_persons():
-
     string = """CREATE TABLE Persons(
         id_person INT NOT NULL AUTO_INCREMENT,
         first_name VARCHAR(60) NOT NULL,
@@ -15,7 +14,6 @@ def schema_table_persons():
 
 
 def schema_table_employees():
-
     string = """CREATE TABLE Employees(
         id INT NOT NULL,
         date_of_employment DATE NOT NULL,
@@ -28,7 +26,6 @@ def schema_table_employees():
 
 
 def schema_table_positions():
-
     return """
         CREATE TABLE Positions (
             id INT NOT NULL AUTO_INCREMENT,
@@ -40,7 +37,6 @@ def schema_table_positions():
 
 
 def schema_table_PositionsOfEmployees():
-    
     return """
         create table PositionsOfEmployees(
             id_employee INT NOT NULL, 
@@ -53,7 +49,6 @@ def schema_table_PositionsOfEmployees():
 
 
 def schema_table_companies():
-    
     return """
         create table Companies(
             id INT NOT NULL AUTO_INCREMENT,
@@ -66,10 +61,7 @@ def schema_table_companies():
     """
 
 
-
-
 def schema_table_projects():
-    
     return """
     CREATE TABLE Projects (
         id INT NOT NULL,
@@ -87,7 +79,6 @@ def schema_table_projects():
 
 
 def schema_table_tasks():
-    
     return """
     CREATE TABLE Tasks (
         id_task INT NOT NULL,
