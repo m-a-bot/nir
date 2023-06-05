@@ -9,6 +9,9 @@ class Plotter:
         else:
             plt.plot(x_data, y_data, label=_label, linestyle=_linestyle, linewidth=_linewidth)
 
+    def set_title(self, title):
+        plt.title(title)
+
     def set_xlabel(self, name: str):
 
         plt.xlabel(name)

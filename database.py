@@ -135,6 +135,16 @@ class DBManager:
             WHERE table_schema = {self._config["database"]};
             """)
 
+    def get_average_table_size(self):
+
+        with Transaction(self._connection, self._cursor) as trans:
+            trans.execute(f"""
+            SELECT round(sum((data_length + index_length) / 1024 ), 2) / count(*)  `Size in KB`
+            FROM information_schema.TABLES
+            WHERE table_schema = {wrap(self._config["database"])} group by table_schema
+            """)
+            return trans.get_one()
+
     def get_size_databases(self):
 
         with Transaction(self._connection, self._cursor) as trans:
@@ -144,6 +154,17 @@ class DBManager:
             FROM information_schema.tables 
             GROUP BY table_schema;
             """)
+
+    def get_size_database(self):
+        
+        with Transaction(self._connection, self._cursor) as trans:
+            trans.execute(f"""
+            SELECT 
+            ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" 
+            FROM information_schema.tables WHERE table_schema = {wrap(self._config["database"])}
+            GROUP BY table_schema ;
+            """)
+            return trans.get_one()
 
     def _connect(self, config):
 
