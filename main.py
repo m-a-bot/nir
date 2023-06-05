@@ -25,19 +25,249 @@ def copy_database():
 
 
 def schemes_1nf():
-    ...
+    
+    employees = """
+    create table Employees(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    date_of_birth date not null,
+    number varchar(20) not null,
+    email varchar(255),
+    ID_position int,
+    ID_department int,
+    FOREIGN KEY (ID_position) REFERENCES Positions (ID),
+    FOREIGN KEY (ID_department) REFERENCES Departments (ID)
+    );
+    """
+    positions = """
+    create table Positions(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    salary numeric not null
+    );
+    """
+    departments = """
+    create table Departments(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null
+    );
+    """
+    projects = """
+    create table Projects(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    date_of_start datetime not null,
+    date_of_end datetime not null
+    );
+    """
+    project_participants = """
+    create table ProjectParticipants(
+    ID_employee int not null,
+    ID_project int not null,
+    PRIMARY KEY (ID_employee, ID_project),
+    FOREIGN KEY (ID_employee) REFERENCES Employees (ID),
+    FOREIGN KEY (ID_project) REFERENCES Projects (ID)
+    );
+    """
+    return [employees, positions, departments, projects, project_participants]
 
 def schemes_2nf():
-    ...
+    
+    employees = """
+    create table Employees(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    date_of_birth date not null,
+    number varchar(20) not null,
+    email varchar(255),
+    ID_position int,
+    FOREIGN KEY (ID_position) REFERENCES Positions (ID)
+    );
+    """
+    positions = """
+    create table Positions(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    salary numeric not null,
+    ID_department int,
+    FOREIGN KEY (ID_department) REFERENCES Departments (ID)
+    );
+    """
+    departments = """
+    create table Departments(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null
+    );
+    """
+    projects = """
+    create table Projects(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    date_of_start datetime not null,
+    date_of_end datetime not null
+    );
+    """
+    project_participants = """
+    create table ProjectParticipants(
+    ID_employee int not null,
+    ID_project int not null,
+    PRIMARY KEY (ID_employee, ID_project),
+    FOREIGN KEY (ID_employee) REFERENCES Employees (ID),
+    FOREIGN KEY (ID_project) REFERENCES Projects (ID)
+    );
+    """
+    return [employees, positions, departments, projects, project_participants]
 
 def schemes_3nf():
-    ...
+    
+    employees = """
+    create table Employees(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    date_of_birth date not null,
+    number varchar(20) not null,
+    email varchar(255),
+    ID_position int,
+    FOREIGN KEY (ID_position) REFERENCES Positions (ID)
+    );
+    """
+    positions = """
+    create table Positions(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    salary numeric not null,
+    );
+    """
+    departments = """
+    create table Departments(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    ID_director int,
+    FOREIGN KEY (ID_director) REFERENCES Employees (ID)
+    );
+    """
+    projects = """
+    create table Projects(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    date_of_start datetime not null,
+    date_of_end datetime not null,
+    ID_department int,
+    FOREIGN KEY (ID_department) REFERENCES Departments (ID)
+    );
+    """
+    project_participants = """
+    create table ProjectParticipants(
+    ID_employee int not null,
+    ID_project int not null,
+    PRIMARY KEY (ID_employee, ID_project),
+    FOREIGN KEY (ID_employee) REFERENCES Employees (ID),
+    FOREIGN KEY (ID_project) REFERENCES Projects (ID)
+    );
+    """
+    return [employees, positions, departments, projects, project_participants]
 
 def schemes_4nf():
-    ...
+    
+    employees = """
+    create table Employees(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    date_of_birth date not null,
+    number varchar(20) not null,
+    email varchar(255),
+    ID_position int,
+    FOREIGN KEY (ID_position) REFERENCES Positions (ID),
+    ID_department int,
+    FOREIGN KEY (ID_department) REFERENCES Departments (ID)
+    );
+    """
+    positions = """
+    create table Positions(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    salary numeric not null,
+    );
+    """
+    departments = """
+    create table Departments(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    );
+    """
+    projects = """
+    create table Projects(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    date_of_start datetime not null,
+    date_of_end datetime not null,
+    );
+    """
+    project_participants = """
+    create table ProjectParticipants(
+    ID_employee int not null,
+    ID_project int not null,
+    PRIMARY KEY (ID_employee, ID_project),
+    FOREIGN KEY (ID_employee) REFERENCES Employees (ID),
+    FOREIGN KEY (ID_project) REFERENCES Projects (ID)
+    );
+    """
+    return [employees, positions, departments, projects, project_participants]
 
 def schemes_5nf():
-    ...
+    
+    employees = """
+    create table Employees(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    date_of_birth date not null,
+    number varchar(20) not null,
+    email varchar(255),
+    ID_position int,
+    FOREIGN KEY (ID_position) REFERENCES Positions (ID),
+    ID_department int,
+    FOREIGN KEY (ID_department) REFERENCES Departments (ID)
+    );
+    """
+    positions = """
+    create table Positions(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    salary numeric not null,
+    );
+    """
+    departments = """
+    create table Departments(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    );
+    """
+    projects = """
+    create table Projects(
+    ID int not null AUTO_INCREMENT PRIMARY KEY,
+    title varchar(255) not null,
+    date_of_start datetime not null,
+    date_of_end datetime not null,
+    );
+    """
+    project_participants = """
+    create table ProjectParticipants(
+    ID_employee int not null,
+    ID_project int not null,
+    start_date datetime not null,
+    end_date datetime not null,
+    number_of_working_hours int not null,
+    PRIMARY KEY (ID_employee, ID_project),
+    FOREIGN KEY (ID_employee) REFERENCES Employees (ID),
+    FOREIGN KEY (ID_project) REFERENCES Projects (ID)
+    );
+    """
+    return [employees, positions, departments, projects, project_participants]
 
 
 if __name__ == "__main__":
@@ -93,7 +323,7 @@ if __name__ == "__main__":
             organizer.create_table(schema)
 
         with Timer() as timer:
-            organizer.insert()
+            organizer.insert('Employees', [])
         insert_time.append(timer.elapsed)
 
         with Timer() as timer:

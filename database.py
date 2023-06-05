@@ -184,13 +184,7 @@ class DBManager:
 
         self._disconnect()
 
-        self._connection = mysql.connector.connect(
-            host=self._config["host"],
-            user=self._config["user"],
-            password=self._config["password"]
-        )
-
-        self._connection.database = name_db
+        self._connect(self._config)
 
         self._cursor = self._connection.cursor()
 
