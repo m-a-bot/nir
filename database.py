@@ -44,6 +44,7 @@ class Transaction:
             self._connect.rollback()
             if exc_type is mysql.connector.DatabaseError:
                 return True
+            
             logging.warning(exc_value)
             # logging.warning("transaction rollback")
             return True
@@ -98,7 +99,7 @@ class DBManager:
     def __switch_db(self, connection, config):
 
         with Transaction(connection, None) as trans:
-            trans.execute_query(f"CREATE DATABASE {config['database']};")
+            trans.execute_query(f"CREATE DATABASE {wrap(config['database'])};")
 
         connection.database = config["database"]
 

@@ -70,7 +70,7 @@ def schemes_1nf():
     FOREIGN KEY (ID_project) REFERENCES Projects (ID)
     );
     """
-    return [employees, positions, departments, projects, project_participants]
+    return [positions, departments, projects, employees, project_participants]
 
 def schemes_2nf():
     
@@ -118,7 +118,7 @@ def schemes_2nf():
     FOREIGN KEY (ID_project) REFERENCES Projects (ID)
     );
     """
-    return [employees, positions, departments, projects, project_participants]
+    return [departments, projects, positions, employees, project_participants]
 
 def schemes_3nf():
     
@@ -138,7 +138,7 @@ def schemes_3nf():
     create table Positions(
     ID int not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(255) not null,
-    salary numeric not null,
+    salary numeric not null
     );
     """
     departments = """
@@ -168,7 +168,7 @@ def schemes_3nf():
     FOREIGN KEY (ID_project) REFERENCES Projects (ID)
     );
     """
-    return [employees, positions, departments, projects, project_participants]
+    return [departments, projects, positions, employees, project_participants]
 
 def schemes_4nf():
     
@@ -190,7 +190,7 @@ def schemes_4nf():
     create table Positions(
     ID int not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(255) not null,
-    salary numeric not null,
+    salary numeric not null
     );
     """
     departments = """
@@ -216,7 +216,7 @@ def schemes_4nf():
     FOREIGN KEY (ID_project) REFERENCES Projects (ID)
     );
     """
-    return [employees, positions, departments, projects, project_participants]
+    return [departments, projects, positions, employees, project_participants]
 
 def schemes_5nf():
     
@@ -238,13 +238,13 @@ def schemes_5nf():
     create table Positions(
     ID int not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(255) not null,
-    salary numeric not null,
+    salary numeric not null
     );
     """
     departments = """
     create table Departments(
     ID int not null AUTO_INCREMENT PRIMARY KEY,
-    title varchar(255) not null,
+    title varchar(255) not null
     );
     """
     projects = """
@@ -252,7 +252,7 @@ def schemes_5nf():
     ID int not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(255) not null,
     date_of_start datetime not null,
-    date_of_end datetime not null,
+    date_of_end datetime not null
     );
     """
     project_participants = """
@@ -267,7 +267,7 @@ def schemes_5nf():
     FOREIGN KEY (ID_project) REFERENCES Projects (ID)
     );
     """
-    return [employees, positions, departments, projects, project_participants]
+    return [departments, projects, positions, employees, project_participants]
 
 
 if __name__ == "__main__":
@@ -323,27 +323,51 @@ if __name__ == "__main__":
             organizer.create_table(schema)
 
         with Timer() as timer:
-            organizer.insert('Employees', [])
+            organizer.update('Positions', ['title', 'salary'], [["Admin", 100000]])
+            organizer.update('Departments', ['title'], [['Main']])
+            organizer.update('Projects', ['title', 'date_of_start', 'date_of_end'], [['XXX', "2023-06-05 16:56:49", "2023-10-05 16:56:49"]])
+
+            organizer.update('Employees', ['first_name', 'last_name', 'date_of_birth', 'number', 'email', 'ID_position', 'ID_department'],
+                             [['Иван', "Иванов", "2000-01-01", "987654321", "test@test.com", 1, 1]])
+            
+            organizer.update('ProjectParticipants', ['ID_employee', 'ID_project'], [[1, 1]])
         insert_time.append(timer.elapsed)
 
         with Timer() as timer:
-            organizer.select()
+            organizer.select('Employees')
+            organizer.select('Positions')
+            organizer.select('Departments')
+            organizer.select('Projects')
+            organizer.select('ProjectParticipants')
         select_time.append(timer.elapsed)
         
         db_sizes.append(organizer.get_size_database())
         average_table_size.append(organizer.get_average_table_size())
 
+        # 2 нормальная форма
         organizer.switch_database('2nf')
 
         for schema in schemes_2nf():
             organizer.create_table(schema)
 
         with Timer() as timer:
-            organizer.insert()
+            organizer.update('Departments', ['title'], [['Main']])
+            organizer.update('Projects', ['title', 'date_of_start', 'date_of_end'], [['XXX', "2023-06-05 16:56:49", "2023-10-05 16:56:49"]])
+
+            organizer.update('Positions', ['title', 'salary', 'ID_department'], [["Admin", 100000, 1]])
+            
+            organizer.update('Employees', ['first_name', 'last_name', 'date_of_birth', 'number', 'email', 'ID_positions'],
+                             [['Иван', "Иванов", "2000-01-01", "987654321", "test@test.com", 1]])
+            
+            organizer.update('ProjectParticipants', ['ID_employee', 'ID_project'], [[1, 1]])
         insert_time.append(timer.elapsed)
 
         with Timer() as timer:
-            organizer.select()
+            organizer.select('Employees')
+            organizer.select('Positions')
+            organizer.select('Departments')
+            organizer.select('Projects')
+            organizer.select('ProjectParticipants')
         select_time.append(timer.elapsed)
         
         db_sizes.append(organizer.get_size_database())
@@ -355,11 +379,21 @@ if __name__ == "__main__":
             organizer.create_table(schema)
 
         with Timer() as timer:
-            organizer.insert()
+            organizer.update('Positions', ['title', 'salary'], [["Admin", 100000]])
+            organizer.update('Employees', ['first_name', 'last_name', 'date_of_birth', 'number', 'email', 'ID_position'],
+                             [['Иван', "Иванов", "2000-01-01", "987654321", "test@test.com", 1]])
+            
+            organizer.update('Departments', ['title', 'ID_employee'], [['Main', 1]])
+            organizer.update('Projects', ['title', 'date_of_start', 'date_of_end', "ID_department"], [['XXX', "2023-06-05 16:56:49", "2023-10-05 16:56:49", 1]])
+            organizer.update('ProjectParticipants', ['ID_employee', 'ID_project'], [[1, 1]])
         insert_time.append(timer.elapsed)
 
         with Timer() as timer:
-            organizer.select()
+            organizer.select('Employees')
+            organizer.select('Positions')
+            organizer.select('Departments')
+            organizer.select('Projects')
+            organizer.select('ProjectParticipants')
         select_time.append(timer.elapsed)
         
         db_sizes.append(organizer.get_size_database())
@@ -371,11 +405,21 @@ if __name__ == "__main__":
             organizer.create_table(schema)
 
         with Timer() as timer:
-            organizer.insert()
+            organizer.update('Positions', ['title', 'salary'], [["Admin", 100000]])
+            organizer.update('Departments', ['title'], [['Main']])
+            organizer.update('Employees', ['first_name', 'last_name', 'date_of_birth', 'number', 'email'],
+                             [['Иван', "Иванов", "2000-01-01", "987654321", "test@test.com"]])
+            
+            organizer.update('Projects', ['title', 'date_of_start', 'date_of_end'], [['XXX', "2023-06-05 16:56:49", "2023-10-05 16:56:49"]])
+            organizer.update('ProjectParticipants', ['ID_employee', 'ID_project'], [[1, 1]])
         insert_time.append(timer.elapsed)
 
         with Timer() as timer:
-            organizer.select()
+            organizer.select('Employees')
+            organizer.select('Positions')
+            organizer.select('Departments')
+            organizer.select('Projects')
+            organizer.select('ProjectParticipants')
         select_time.append(timer.elapsed)
         
         db_sizes.append(organizer.get_size_database())
@@ -387,11 +431,22 @@ if __name__ == "__main__":
             organizer.create_table(schema)
 
         with Timer() as timer:
-            organizer.insert()
+            organizer.update('Positions', ['title', 'salary'], [["Admin", 100000]])
+            organizer.update('Departments', ['title'], [['Main']])
+            organizer.update('Employees', ['first_name', 'last_name', 'date_of_birth', 'number', 'email'],
+                             [['Иван', "Иванов", "2000-01-01", "987654321", "test@test.com"]])
+            
+            
+            organizer.update('Projects', ['title', 'date_of_start', 'date_of_end'], [['XXX', "2023-06-05 16:56:49", "2023-10-05 16:56:49"]])
+            organizer.update('ProjectParticipants', ['ID_employee', 'ID_project', 'start_date', 'end_date'], [[1, 1, "2023-06-05 16:56:49", "2023-10-05 16:56:49"]])
         insert_time.append(timer.elapsed)
 
         with Timer() as timer:
-            organizer.select()
+            organizer.select('Employees')
+            organizer.select('Positions')
+            organizer.select('Departments')
+            organizer.select('Projects')
+            organizer.select('ProjectParticipants')
         select_time.append(timer.elapsed)
         
         db_sizes.append(organizer.get_size_database())
