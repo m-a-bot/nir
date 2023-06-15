@@ -47,6 +47,7 @@ class Timer:
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.stop = perf_counter()
         self.elapsed = self.stop - self.start
+        return True
 
 
 def wrap(string, symb="'"):

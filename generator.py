@@ -78,6 +78,8 @@ def get_text(count_proposals):
 
     return result
 
+def proposal():
+    return get_proposal(generate_string_with_different_length(15, 30))
 
 def get_first_name(length_a: int = 4, length_b: int = 31):
     return get_string_with_capital_symbol(
@@ -144,6 +146,8 @@ def get_time():
 
     return f"{hh}:{mm}:{sec}"
 
+def get_salary(a=25000, b=75000, _step=1000):
+    return randAtoB(a, b, step=_step)
 
 class Generator:
     
@@ -167,7 +171,6 @@ class Generator:
 
         return data
 
-
     """
     date_of_employment, salary, number_of_tasks
     """
@@ -177,7 +180,7 @@ class Generator:
 
         for _ in range(number):
 
-            data.append((get_date(), randAtoB(25000, 75000, step=1000), rand0toB(10)))
+            data.append((get_date(), get_salary(), rand0toB(10)))
 
         return data
     
@@ -192,7 +195,7 @@ class Generator:
         for _ in range(number):
 
             data.append(
-                (get_string_with_capital_symbol(generate_string_with_different_length(10, 25)), get_text(randAtoB(5, 10)))
+                (get_string_with_capital_symbol(generate_string_with_different_length(10, 25)), get_text(randAtoB(1, 3)))
             )
 
         return data
@@ -253,7 +256,7 @@ class Generator:
         for _ in range(n):
 
             data.append(
-                (get_first_name(10, 100), get_text(randAtoB(5, 10)), randAtoB(1,6), randAtoB(10000, 150000, 10000), get_date())
+                (1, get_first_name(10, 100), get_text(randAtoB(5, 10)), randAtoB(1,6), randAtoB(10000, 150000, 10000), get_date(), 1)
             )
 
         return data
@@ -275,7 +278,7 @@ class Generator:
         for _ in range(n):
 
             data.append(
-                (get_first_name(10, 100), get_text(randAtoB(5, 10)), randAtoB(1,6), randAtoB(10000, 150000, 10000), get_time(), get_date())
+                (1, get_first_name(10, 100), get_text(randAtoB(5, 10)), randAtoB(1,6), randAtoB(10000, 150000, 10000), get_time(), get_date(), 1)
             )
 
         return data

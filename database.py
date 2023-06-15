@@ -68,7 +68,9 @@ class DBManager:
         with Transaction(self._connection, self._cursor) as trans:
             trans.execute(query)
 
-    def insert(self, table, columns, values):
+    def insert(self, table, columns=None, values=None):
+        if columns is None:
+            columns = self.get_columns(table)
         _columns = collection_to_str(columns, ", ")
         _template = collection_to_str(["%s"] * len(values[0]), ", ", False)
 
@@ -96,6 +98,18 @@ class DBManager:
         with Transaction(self._connection, self._cursor) as trans:
             trans.execute(f"DELETE FROM {wrap(table, '`')};")
 
+    def default_auto_increment(self, table, value=1):
+        with Transaction(self._connection, self._cursor) as trans:
+            trans.execute(f"alter table {wrap(table, '`')} auto_increment = {value};")
+
+    def get_columns(self, table):
+        data = None
+        with Transaction(self._connection, self._cursor) as trans:
+            trans.execute(f"show columns from {wrap(table, '`')};")
+            data = trans.get_all()
+
+        return [column[0] for column in data]
+
     def __switch_db(self, connection, config):
 
         with Transaction(connection, None) as trans:
@@ -105,13 +119,19 @@ class DBManager:
 
     def dump(self, dump_name="main.sql"):
 
-        cmd = f"mysqldump -h {self._config['host']} -u {self._config['user']} -p {self._config['database']} > {dump_name}"
-        subprocess.run(cmd, shell=True)
+        try:
+            cmd = f"mysqldump -h {self._config['host']} -u {self._config['user']} -p {self._config['database']} > {dump_name}"
+            subprocess.run(cmd, shell=True)
+        except:
+            ...
 
     def restore(self, dump_name="main.sql"):
 
-        cmd = f"mysqldump -h {self._config['host']} -u {self._config['user']} -p {self._config['database']} < {dump_name}"
-        subprocess.run(cmd, shell=True)
+        try:
+            cmd = f"mysql -h {self._config['host']} -u {self._config['user']} -p {self._config['database']} < {dump_name}"
+            subprocess.run(cmd, shell=True)
+        except:
+            ...
 
     def get_size_table(self, table):
 
