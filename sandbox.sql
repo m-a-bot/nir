@@ -54,8 +54,7 @@ CREATE TABLE `Employees` (
   `date_of_employment` date NOT NULL,
   `salary` decimal(10,0) NOT NULL,
   `number_of_tasks` int NOT NULL DEFAULT '0',
-  KEY `id` (`id`),
-  CONSTRAINT `Employees_ibfk_1` FOREIGN KEY (`id`) REFERENCES `Persons` (`id_person`)
+  KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,7 +84,7 @@ CREATE TABLE `Persons` (
   `email` varchar(150) DEFAULT 'test@test.ru',
   `number` varchar(20) NOT NULL,
   PRIMARY KEY (`id_person`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,11 +132,7 @@ DROP TABLE IF EXISTS `PositionsOfEmployees`;
 CREATE TABLE `PositionsOfEmployees` (
   `id_employee` int NOT NULL,
   `id_position` int NOT NULL,
-  `bet` decimal(10,0) NOT NULL,
-  KEY `id_employee` (`id_employee`),
-  KEY `id_position` (`id_position`),
-  CONSTRAINT `PositionsOfEmployees_ibfk_1` FOREIGN KEY (`id_employee`) REFERENCES `Persons` (`id_person`),
-  CONSTRAINT `PositionsOfEmployees_ibfk_2` FOREIGN KEY (`id_position`) REFERENCES `Positions` (`id`)
+  `bet` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -158,7 +153,7 @@ DROP TABLE IF EXISTS `Projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Projects` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `id_company` int NOT NULL,
   `type_project` varchar(300) NOT NULL,
   `technical_specification` varchar(300) NOT NULL,
@@ -166,10 +161,8 @@ CREATE TABLE `Projects` (
   `summary` decimal(10,0) NOT NULL,
   `dead_line` date NOT NULL,
   `responsible_person` int DEFAULT NULL,
-  PRIMARY KEY (`id`,`id_company`),
-  KEY `responsible_person` (`responsible_person`),
-  CONSTRAINT `Projects_ibfk_1` FOREIGN KEY (`responsible_person`) REFERENCES `Employees` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`,`id_company`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,17 +183,15 @@ DROP TABLE IF EXISTS `Tasks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Tasks` (
-  `id_task` int NOT NULL,
+  `id_task` int NOT NULL AUTO_INCREMENT,
   `id_project` int NOT NULL,
   `title` varchar(100) NOT NULL,
   `description_` varchar(300) NOT NULL,
   `dead_line_time` time NOT NULL,
   `dead_line` date NOT NULL,
   `responsible_person` int DEFAULT NULL,
-  PRIMARY KEY (`id_task`,`id_project`),
-  KEY `responsible_person` (`responsible_person`),
-  CONSTRAINT `Tasks_ibfk_1` FOREIGN KEY (`responsible_person`) REFERENCES `Employees` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id_task`,`id_project`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,4 +213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-15 21:05:52
+-- Dump completed on 2023-06-15 21:24:02

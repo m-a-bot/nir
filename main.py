@@ -56,6 +56,9 @@ def task2():
                 data.append(generator.generate_tasks(i))
         generate_time.append(timer.elapsed)
 
+    plt.set_title("график времени генерации данных")
+    plt.set_xlabel("количество генерируемых строк")
+    plt.set_ylabel("время")
     plt.plot(generate_time)
     plt.show()
     return number_of_table, data
@@ -141,15 +144,27 @@ def task3(number_of_table, data):
                 if number_of_table == 6:
                     manager.delete('Tasks')
             delete_time.append(timer.elapsed)
+    
+    plt.set_title("SELECT *")
+    plt.set_xlabel("количество запрашиваемых строк")
+    plt.set_ylabel("время")
+    plt.plot(select_time)
+    plt.show()
 
-        plt.plot(select_time)
-        plt.show()
-        plt.plot(insert_time)
-        plt.show()
-        plt.plot(delete_time)
-        plt.show()
+    plt.set_title("INSERT")
+    plt.set_xlabel("количество вставляемых строк")
+    plt.set_ylabel("время")
+    plt.plot(insert_time)
+    plt.show()
+
+    plt.set_title("DELETE")
+    plt.set_xlabel("количество удаляемых строк")
+    plt.set_ylabel("время")
+    plt.plot(delete_time)
+    plt.show()
 
 def task5():
+    plt = Plotter()
     # Исследовать эффективность использования индексов
     number_of_rows = 100
     data = []
@@ -244,28 +259,52 @@ def task5():
             manager.delete('T5')
             manager.delete('T6')
 
-    plt.plot(selectT1_time)
-    plt.plot(selectT2_time)
+    plt.plot(selectT1_time, _label = "T1")
+    plt.plot(selectT2_time, _label = "T2")
+    plt.set_title("select")
+    plt.set_legend()
+    plt.set_xlabel("количество вставляемых строк")
+    plt.set_ylabel("время")
     plt.show()
 
-    plt.plot(selectT3_time)
-    plt.plot(selectT4_time)
+    plt.plot(selectT3_time, _label = "T3")
+    plt.plot(selectT4_time, _label = "T4")
+    plt.set_title("select")
+    plt.set_legend()
+    plt.set_xlabel("количество вставляемых строк")
+    plt.set_ylabel("время")
     plt.show()
 
-    plt.plot(selectT5_time)
-    plt.plot(selectT6_time)
+    plt.plot(selectT5_time, _label = "T5")
+    plt.plot(selectT6_time, _label = "T6")
+    plt.set_title("select")
+    plt.set_legend()
+    plt.set_xlabel("количество вставляемых строк")
+    plt.set_ylabel("время")
     plt.show()
 
-    plt.plot(insertT1_time)
-    plt.plot(insertT2_time)
+    plt.plot(insertT1_time, _label = "T1")
+    plt.plot(insertT2_time, _label = "T2")
+    plt.set_title("insert")
+    plt.set_xlabel("количество запрашиваемых строк")
+    plt.set_ylabel("время")
+    plt.set_legend()
     plt.show()
 
-    plt.plot(insertT3_time)
-    plt.plot(insertT4_time)
+    plt.plot(insertT3_time, _label = "T3")
+    plt.plot(insertT4_time, _label = "T4")
+    plt.set_title("insert")
+    plt.set_legend()
+    plt.set_xlabel("количество запрашиваемых строк")
+    plt.set_ylabel("время")
     plt.show()
 
-    plt.plot(insertT5_time)
-    plt.plot(insertT6_time)
+    plt.plot(insertT5_time, _label = "T5")
+    plt.plot(insertT6_time, _label = "T6")
+    plt.set_title("insert")
+    plt.set_legend()
+    plt.set_xlabel("количество запрашиваемых строк")
+    plt.set_ylabel("время")
     plt.show()
 
 
@@ -277,6 +316,6 @@ if __name__ == "__main__":
 
     task3(number_of_table, data)
 
-    # task5()
+    task5()
 
     
